@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Выход из системы</title>
+</head>
+<body>
+
+<h2 th:inline="text">Уважаемый [[${#httpServletRequest.remoteUser}]]!</h2>
+
+<p>Вы можете выйти из системы или вернуться обратно нажав кнопку "Назад" браузера</p>
+
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Выйти"/>
+
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</form>
+
+</body>
+</html>
