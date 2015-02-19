@@ -16,8 +16,8 @@
 <h2 th:if="${param.error == null and param.logout == null}">Вход в нашу систему</h2>
 
 <form th:action="@{/login}" method="post">
-    <label>User Name:&nbsp;<input type="text" name="username" value="admin"/></label>
-    <label>Password:&nbsp;<input type="password" name="password" value="password"/></label>
+    <label>User email:&nbsp;<input type="email" name="username" value="admin@gmail.com"/></label>
+    <label>Password:&nbsp;<input type="password" name="password" value="admin"/></label>
 
     <input type="submit" value="Войти"/>
 
