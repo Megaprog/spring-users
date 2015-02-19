@@ -1,24 +1,41 @@
 package users.security;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import users.model.User;
-
-import java.util.Collections;
+import users.model.UserRole;
 
 public class CurrentUser extends org.springframework.security.core.userdetails.User {
-    private final User user;
+    private final long id;
+    private final String name;
+    private final String email;
+    private final UserRole role;
 
     public CurrentUser(User user) {
-        super(user.getName(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority(user.getRole().name())));
-        this.user = user;
+        super(user.getEmail(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().name()));
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.role = user.getRole();
     }
 
-    public User getUser() {
-        return user;
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public UserRole getRole() {
+        return role;
     }
 
     @Override
     public String toString() {
-        return super.toString() + ": user=" + getUser() + "; ";
+        return super.toString() + ": id=" + getId() + ": name=" + getName() + ": role=" + getRole() + "; ";
     }
 }

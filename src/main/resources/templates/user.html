@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список пользователей</title>
+</head>
+<body>
+
+<form th:action="@{/update}" method="post">
+    <button type="submit" name="add">Добавить пользователя</button>
+
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</form>
+
+</body>
+</html>
