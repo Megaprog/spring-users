@@ -32,6 +32,6 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        userRepository.save(new User("admin", passwordEncoder.encode("admin"), "admin@gmail.com", UserRole.Editor));
+        final User user = userRepository.save(new User("admin", passwordEncoder.encode("admin"), "admin@gmail.com", UserRole.Editor, "Administration"));
     }
 }
