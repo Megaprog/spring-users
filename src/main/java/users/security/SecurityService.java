@@ -17,6 +17,6 @@ public class SecurityService implements UserDetailsService {
     public CurrentUser loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findOneByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " was not found"));
-        return new CurrentUser(user);
+        return new CurrentUser(user.getEmail(), user.getPassword(), user.getName(), user.getRole(), user.getId());
     }
 }

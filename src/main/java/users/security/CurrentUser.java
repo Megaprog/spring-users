@@ -1,7 +1,6 @@
 package users.security;
 
 import org.springframework.security.core.authority.AuthorityUtils;
-import users.model.User;
 import users.model.UserRole;
 
 public class CurrentUser extends org.springframework.security.core.userdetails.User {
@@ -10,12 +9,12 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
     private final String email;
     private final UserRole role;
 
-    public CurrentUser(User user) {
-        super(user.getEmail(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().name()));
-        this.id = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.role = user.getRole();
+    public CurrentUser(String email, String password, String name, UserRole role, long id) {
+        super(email, password, AuthorityUtils.createAuthorityList(role.name()));
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
     }
 
     public long getId() {
