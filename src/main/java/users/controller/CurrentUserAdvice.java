@@ -8,7 +8,7 @@ import users.security.CurrentUser;
 @ControllerAdvice
 public class CurrentUserAdvice {
 
-    @ModelAttribute("user")
+    @ModelAttribute
     public CurrentUser getCurrentUser(@AuthenticationPrincipal CurrentUser currentUser) {
         return currentUser;
     }

@@ -9,6 +9,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/index.html").setViewName("redirect:users");
+        registry.addViewController("/").setViewName("forward:/user/list");
+        registry.addViewController("/index.html").setViewName("redirect:/");
     }
 }

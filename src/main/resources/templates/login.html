@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Login</title>
     <meta charset="UTF-8"/>
-    <title>System login</title>
+    <link rel="stylesheet" href="../static/css/users.css" th:href="@{/css/users.css}"/>
 </head>
 <body>
 
 <p th:if="${param.error}">
-    Invalid username and password.
+    Invalid username or password.
 </p>
 <p th:if="${param.logout}">
     You have been logged out.
 </p>
 
-<h2 th:if="${param.error == null and param.logout == null}">Вход в нашу систему</h2>
+<div th:if="${param.error == null and param.logout == null}">
+    <h2>Login to the system</h2>
+    <p>You can use: admin@gmail.com / admin</p>
+</div>
 
 <form th:action="@{/login}" method="post">
 
     <label>User email:&nbsp;<input type="email" name="username" value="admin@gmail.com"/></label>
     <label>Password:&nbsp;<input type="password" name="password" value="admin"/></label>
 
-    <label>&nbsp;<input type="checkbox" name="remember-me"/>Remember me&nbsp;</label>
+    <label>&nbsp;<input type="checkbox" name="remember-me" checked="checked"/>Remember me&nbsp;</label>
 
     <input type="submit" value="Login"/>
 </form>
