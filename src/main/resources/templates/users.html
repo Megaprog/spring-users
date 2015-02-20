@@ -8,7 +8,7 @@
 <body>
 
 <form class="logout" th:action="@{/logout}" method="post">
-    <button type="submit" th:text="'Logout: ' + ${currentUser.name} + ' (' + ${currentUser.role.name()} + ')'"></button>
+    <button type="submit" th:text="'Logout: ' + ${currentUser.name} + ' (' + ${currentUser.role.name()} + ')'">Logout</button>
 </form>
 
 <h2>Users list</h2>
@@ -27,12 +27,12 @@
             <td th:text="*{email}">some@mail.com</td>
             <td th:text="*{name}">Jon</td>
             <td th:text="*{role.name()}">User</td>
-            <td><a href="user.html" th:href="@{user/update/{id}}"><button type="button">edit</button></a></td>
+            <td><a href="user.html" th:href="@{/user/update/{id}(id=*{id})}"><button type="button">Edit</button></a></td>
         </tr>
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="4"><a href="user.html" th:href="@{user/create}"><button type="button">Add new</button></a></td>
+            <td colspan="4"><a href="user.html" th:href="@{/user/create}"><button type="button" name="newUser">New user</button></a></td>
         </tr>
     </tfoot>
 </table>

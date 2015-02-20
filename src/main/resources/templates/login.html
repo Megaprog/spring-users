@@ -7,14 +7,14 @@
 </head>
 <body>
 
-<p th:if="${param.error}">
+<p th:if="${error}">
     Invalid username or password.
 </p>
-<p th:if="${param.logout}">
+<p th:if="${logout}">
     You have been logged out.
 </p>
 
-<div th:if="${param.error == null and param.logout == null}">
+<div th:if="${login}">
     <h2>Login to the system</h2>
     <p>You can use: admin@gmail.com / admin</p>
 </div>

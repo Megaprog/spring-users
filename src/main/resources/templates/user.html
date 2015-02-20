@@ -9,8 +9,78 @@
 
 <h2>User details</h2>
 
-<form th:action="@{/update}" method="post">
-    <button type="submit" name="add">Добавить пользователя</button>
+<form  class="detail" th:action="@{/user/save}" method="post">
+
+    <fieldset>
+        <legend>General</legend>
+        <table>
+            <tr>
+                <td><label for="email">Email:</label></td>
+                <td><input id="email" type="email" name="email"/></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label for="name">Name:</label></td>
+                <td><input id="name" type="text" name="name"/></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label for="role">Role:</label></td>
+                <td><input id="role" type="text" name="role"/></td>
+                <td></td>
+            </tr>
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>Time</legend>
+        <table>
+            <tr>
+                <td><label for="time_zone">TimeZone:</label></td>
+                <td><input id="time_zone" type="text" name="time_zone"/></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Added time:</td>
+                <td>01.01.2001</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Edited time:</td>
+                <td>01.01.2001</td>
+                <td></td>
+            </tr>
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>Addresses</legend>
+        <table class="addresses">
+            <tbody>
+                <tr>
+                    <td><label for="address">Address1:</label> </td>
+                    <td><textarea id="address" readonly="readonly"></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button type="submit" name="editAddress">Edit</button>&nbsp;&nbsp;
+                        <button type="submit" name="removeAddress">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td><button type="submit" name="addAddress">New address</button></td>
+                </tr>
+            </tfoot>
+        </table>
+    </fieldset>
+
+    <p>
+        <button type="submit" name="save">Save</button>
+    </p>
 </form>
 
 </body>

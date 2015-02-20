@@ -1,3 +1,4 @@
+* {box-sizing: border-box;}
 
 html {
   background-color: #f0f0f0;
@@ -8,9 +9,9 @@ body {
   font-size: 12px;
   background-color: #ffffff;
   border: 1px solid #cccccc;
-  margin: 0px auto; 
-  padding: 20px 20px; 
-  /*width: 850px;*/
+  margin: 0 auto;
+  padding: 1em 1em;
+  width: 900px;
 }
 
 /*h2 {*/
@@ -18,8 +19,13 @@ body {
   /*margin-bottom: 30px;*/
 /*}*/
 
+table {
+    border-collapse: collapse;
+}
+
 form fieldset {
-  padding-top: 20px;
+  padding-top: 0.75em;
+    margin-bottom: 0.3em;
 }
 
 form div {
@@ -42,11 +48,11 @@ form div > label {
 
 form div > input, form div > select {
   height: 20px;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 
-form div > ul {
+form ul {
   list-style: none;
   padding: 0;
   vertical-align: top;
@@ -87,21 +93,20 @@ form div.submit button {
   font-variant: small-caps;
 }
 
-.users {
+table.users {
   /*width: 100%;*/
   border: 1px solid #000;
-  border-collapse: collapse;
 }
 
 .users tbody > tr > td, .users thead > tr > th {
-  padding: 2px 10px;
+  padding: 3px 10px;
   border-left: 1px dotted #000000;
   vertical-align: top;
   line-height: 20px;
 }
 
 .users tfoot > tr > td {
-    padding: 2px 10px;
+    padding: 4px 10px;
     text-align: center;
 }
 
@@ -120,7 +125,7 @@ form div.submit button {
 
 .users tbody > tr > td > table > tbody > tr> td {
   background-color: #ddff77;
-  padding: 0px 5px;
+  padding: 0 5px;
 }
 
 .users tbody > tr > td > table > tbody > tr> td:last-child {
@@ -142,9 +147,66 @@ ul.errorlist li {
     list-style: none;
     background-color: #f2d768;
     padding: 5px;
-    margin: 3px 0px;
+    margin: 3px 0;
 }
 
 .logout button {
     font-size: 90%;
+}
+
+.detail table {
+    /*border: 1px solid #000;*/
+    text-align: right;
+}
+
+.detail table td:nth-of-type(1) {
+    width: 14em;
+    vertical-align: top;
+}
+
+.detail table td:nth-of-type(2) {
+    width: 22em;
+}
+
+.detail input, .detail textarea {
+    width: 100%;
+    margin-right: 2px;
+}
+
+textarea[readonly] {
+    background-color: #f0f0f0;
+}
+
+table.addresses tbody {
+    border: 1px dashed #000;
+}
+
+table.addresses tbody tr td {
+    padding-top: 0.6em;
+}
+
+table.addresses tbody td:last-of-type {
+    padding-right: 0.5em;
+}
+
+table.addresses tfoot tr td {
+    padding-top: 0.4em;
+    text-align: left;
+}
+
+.addresses button {
+    margin-bottom: 0.5em;
+}
+
+button[name="editAddress"] {
+    width: 5em;
+}
+
+button[name="newUser"] {
+    width: 7em;
+}
+
+button[name="save"] {
+    width: 8em;
+    font-size: 120%;
 }
