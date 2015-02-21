@@ -35,12 +35,6 @@ public class TimeZones {
                 '}';
     }
 
-    public static void main(String[] args) {
-        TimeZones timeZones = new TimeZones();
-
-        timeZones.getEntries().stream().forEach(System.out::println);
-    }
-
     public static class TimeZoneEntry implements Comparable<TimeZoneEntry> {
         private final ZoneId zoneId;
         private final ZoneOffset zoneOffset;

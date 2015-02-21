@@ -1,5 +1,7 @@
 package users.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -63,11 +65,13 @@ public class User {
         return id;
     }
 
-    public ZonedDateTime getCreatedTime() {
+    @DateTimeFormat(style = "LL")
+    public ZonedDateTime getCreatedZoneTime() {
         return ZonedDateTime.of(created.toLocalDateTime(), ZoneId.of(time_zone));
     }
 
-    public ZonedDateTime getUpdatedTime() {
+    @DateTimeFormat(style = "LL")
+    public ZonedDateTime getUpdatedZoneTime() {
         return ZonedDateTime.of(updated.toLocalDateTime(), ZoneId.of(time_zone));
     }
 
@@ -123,8 +127,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", created=" + getCreatedTime() +
-                ", updated=" + getUpdatedTime() +
+                ", created=" + getCreatedZoneTime() +
+                ", updated=" + getUpdatedZoneTime() +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
