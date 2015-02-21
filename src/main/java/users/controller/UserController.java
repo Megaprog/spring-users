@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import users.model.User;
 import users.repository.UserRepository;
 
 @Controller
@@ -29,9 +30,14 @@ public class UserController {
         return "user";
     }
 
-    @RequestMapping(value = "/update{id}", method = RequestMethod.GET)
-    public String update(@PathVariable("id") long id) {
-        return "user";
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
+    public ModelAndView update(@PathVariable("id") long id) {
+        final User user = userRepository.findOne(id);
+        if (user == null) {
+            throw new ExceptionAdvice.UserNotFoundException();
+        }
+
+        return new ModelAndView("user", "user", user);
     }
 
     @RequestMapping(value = "/list1", method = RequestMethod.GET)

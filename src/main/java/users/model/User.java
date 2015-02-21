@@ -3,9 +3,7 @@ package users.model;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +39,8 @@ public class User {
     @Column(nullable = false, length = 16)
     private UserRole role = UserRole.User;
 
-    private transient ZoneOffset zoneOffset = ZonedDateTime.now(ZoneId.systemDefault()).getOffset();
-    private int time_zone = zoneOffset.getTotalSeconds();
+    @Column(nullable = false)
+    private String time_zone = ZoneId.systemDefault().getId();
 
     @ElementCollection
     @OrderColumn(name = "address_order")
@@ -65,12 +63,12 @@ public class User {
         return id;
     }
 
-    public OffsetDateTime getCreatedTime() {
-        return OffsetDateTime.of(created.toLocalDateTime(), getZoneOffset());
+    public ZonedDateTime getCreatedTime() {
+        return ZonedDateTime.of(created.toLocalDateTime(), ZoneId.of(time_zone));
     }
 
-    public OffsetDateTime getUpdatedTime() {
-        return OffsetDateTime.of(updated.toLocalDateTime(), getZoneOffset());
+    public ZonedDateTime getUpdatedTime() {
+        return ZonedDateTime.of(updated.toLocalDateTime(), ZoneId.of(time_zone));
     }
 
     public String getName() {
@@ -105,17 +103,12 @@ public class User {
         this.role = role;
     }
 
-    public int getTimeZone() {
+    public String getTimeZone() {
         return time_zone;
     }
 
-    public void setTimeZone(int time_zone) {
+    public void setTimeZone(String time_zone) {
         this.time_zone = time_zone;
-        this.zoneOffset = ZoneOffset.ofTotalSeconds(time_zone);
-    }
-
-    public ZoneOffset getZoneOffset() {
-        return zoneOffset;
     }
 
     public List<String> getAddresses() {
@@ -135,7 +128,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
-                ", timeZone=" + getZoneOffset() +
+                ", timeZone=" + time_zone +
                 ", addresses=" + addresses +
                 '}';
     }
@@ -143,10 +136,5 @@ public class User {
     @PrePersist
     private void prePersist() {
         created = Timestamp.from(Instant.now());
-    }
-
-    @PostLoad
-    private void postLoad() {
-        setTimeZone(time_zone);
     }
 }

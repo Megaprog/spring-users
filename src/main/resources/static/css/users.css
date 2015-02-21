@@ -168,8 +168,9 @@ ul.errorlist li {
     width: 22em;
 }
 
-.detail input, .detail textarea {
+.detail input, .detail textarea, .detail select {
     width: 100%;
+    margin-left: 2px;
     margin-right: 2px;
 }
 
@@ -177,25 +178,29 @@ textarea[readonly] {
     background-color: #f0f0f0;
 }
 
-table.addresses tbody {
+.addresses tbody {
     border: 1px dashed #000;
 }
 
-table.addresses tbody tr td {
+.addresses tbody tr td {
     padding-top: 0.6em;
 }
 
-table.addresses tbody td:last-of-type {
+.addresses tbody td:last-of-type {
     padding-right: 0.5em;
 }
 
-table.addresses tfoot tr td {
+.addresses tfoot tr td {
     padding-top: 0.4em;
     text-align: left;
 }
 
-.addresses button {
+.addresses tbody button {
     margin-bottom: 0.5em;
+}
+
+.addresses tfoot button {
+    margin-top: 0.4em;
 }
 
 button[name="editAddress"] {

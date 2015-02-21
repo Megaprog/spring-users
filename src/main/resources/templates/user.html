@@ -9,24 +9,34 @@
 
 <h2>User details</h2>
 
-<form  class="detail" th:action="@{/user/save}" method="post">
+<p>All fields are required</p>
+
+<form  class="detail" th:action="@{/user/save}" method="post" th:object="${user}">
+
+    <ul th:if="${#fields.hasErrors('*')}" class="errorlist">
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+    </ul>
 
     <fieldset>
         <legend>General</legend>
         <table>
             <tr>
                 <td><label for="email">Email:</label></td>
-                <td><input id="email" type="email" name="email"/></td>
+                <td><input id="email" type="email" name="email" required="required" th:field="*{email}" th:errorclass="fieldError"/></td>
                 <td></td>
             </tr>
             <tr>
                 <td><label for="name">Name:</label></td>
-                <td><input id="name" type="text" name="name"/></td>
+                <td><input id="name" type="text" name="name" required="required" th:field="*{name}" th:errorclass="fieldError"/></td>
                 <td></td>
             </tr>
             <tr>
                 <td><label for="role">Role:</label></td>
-                <td><input id="role" type="text" name="role"/></td>
+                <td>
+                    <select id="role" name="role" th:field="*{role}">
+                        <option th:each="enum: ${T(users.model.UserRole).values()}" th:value="${enum.name()}" th:text="${enum}">User</option>
+                    </select>
+                </td>
                 <td></td>
             </tr>
         </table>
@@ -37,7 +47,11 @@
         <table>
             <tr>
                 <td><label for="time_zone">TimeZone:</label></td>
-                <td><input id="time_zone" type="text" name="time_zone"/></td>
+                <td>
+                    <select id="time_zone" name="time_zone" th:field="*{timeZone}">
+                        <option th:each="entry: ${@timeZones.entries}" th:value="${entry.zoneId}" th:text="${entry.display}">+03:00 Europe/Moscow</option>
+                    </select>
+                </td>
                 <td></td>
             </tr>
             <tr>
