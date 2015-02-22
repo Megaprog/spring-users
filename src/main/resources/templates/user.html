@@ -17,6 +17,14 @@
             var addressRemove = document.getElementById("addressRemove");
             var h3Remove = document.getElementById("h3Remove");
             var removeOk = document.getElementById("removeOk");
+            var closeRemove = document.getElementById("closeRemove");
+
+            document.getElementById("addressCancel").onclick = function() {
+                closeAddress.click();
+            };
+            document.getElementById("removeCancel").onclick = function() {
+                closeRemove.click();
+            };
 
             for (var i = 0; i < 1000; i++) {
                 var address = document.getElementById("address" + i);
@@ -28,15 +36,17 @@
 
                 var editAddress = document.getElementById("editAddress" + i);
                 editAddress.onclick = function(index) {
-                    return function(e) {
-                        var country = document.getElementById("country" + index);
-                        var city = document.getElementById("city" + index);
-                        var street = document.getElementById("street" + index);
+                    return function() {
+                        var country = document.getElementById("addresses" + index + ".country");
+                        var city = document.getElementById("addresses" + index + ".city");
+                        var street = document.getElementById("addresses" + index + ".street");
 
                         h3Address.innerText = "Address" + (index + 1);
                         addressCountry.value = country.value;
                         addressCity.value = city.value;
                         addressStreet.value = street.value;
+
+                        closeAddress.href = "#address" + index;
 
                         formAddress.onsubmit = function(e) {
                             e.preventDefault();
@@ -54,10 +64,11 @@
 
                 var removeAddress = document.getElementById("removeAddress" + i);
                 removeAddress.onclick = function(index) {
-                    return function(e) {
+                    return function() {
                         h3Remove.innerText = "Address" + (index + 1);
                         addressRemove.value = document.getElementById("address" + index).value;
                         removeOk.value = index;
+                        closeRemove.href = "#address" + index;
                     };
                 }(i);
             }
@@ -68,8 +79,8 @@
                 address = document.getElementById("address" + index);
             }
 
-            address.value = document.getElementById("country" + index).value + ", " +
-                document.getElementById("city" + index).value + ", " + document.getElementById("street" + index).value;
+            address.value = document.getElementById("addresses" + index + ".country").value + ", " +
+                document.getElementById("addresses" + index + ".city").value + ", " + document.getElementById("addresses" + index + ".street").value;
         }
 
         window.addEventListener("load", init, false);
@@ -89,6 +100,8 @@
     </ul>
 
     <input type="hidden" th:field="*{id}"/>
+    <input type="hidden" th:field="*{created}"/>
+    <input type="hidden" th:field="*{updated}"/>
 
     <fieldset>
         <legend>General</legend>
@@ -152,14 +165,14 @@
         <legend>Addresses</legend>
         <table class="addresses">
             <tbody>
-            <th:block th:each="address, addressStat : *{addresses}" th:object="${address}" th:with="inputId='address' + ${addressStat.index}">
+            <th:block th:each="address, addressStat : *{addresses}" th:with="inputId='address' + ${addressStat.index}">
                 <tr>
                     <td><label for="address" th:for="${inputId}" th:text="'Address' + ${addressStat.count}">Address1:</label></td>
                     <td>
                         <textarea id="address" th:id="${inputId}">Russia, Moscow, Arbat, 9</textarea>
-                        <input type="hidden" name="country" th:id="'country' + ${addressStat.index}" th:name="'country' + ${addressStat.index}" th:value="*{country}"/>
-                        <input type="hidden" name="city" th:id="'city' + ${addressStat.index}" th:name="'city' + ${addressStat.index}" th:value="*{city}"/>
-                        <input type="hidden" name="street" th:id="'street' + ${addressStat.index}" th:name="'street' + ${addressStat.index}" th:value="*{street}"/>
+                        <input type="hidden" th:field="*{addresses[__${addressStat.index}__].country}"/>
+                        <input type="hidden" th:field="*{addresses[__${addressStat.index}__].city}"/>
+                        <input type="hidden" th:field="*{addresses[__${addressStat.index}__].street}"/>
                     </td>
                 </tr>
                 <tr class="address-edit">
@@ -182,6 +195,7 @@
 
     <p>
         <button type="submit" name="save">Save</button>
+        <a href="users.html" th:href="@{/user/list}"><button type="button" name="cancel">Cancel</button></a>
     </p>
 </form>
 
@@ -202,7 +216,7 @@
             </label>
             <p>
                 <button id="addressOk" type="submit">Ok</button>
-                <a href="#user-details"><button type="button">Cancel</button></a>
+                <button id="addressCancel" type="button">Cancel</button>
             </p>
         </form>
     </div>
@@ -210,7 +224,7 @@
 
 <div id="removeAddress" class="modalDialog">
     <div>
-        <a href="#user-details" title="Закрыть" class="close">X</a>
+        <a href="#user-details" title="Закрыть" class="close" id="closeRemove">X</a>
         <h3 id="h3Remove">Remove address</h3>
         <p>Are you sure you want to delete this address?</p>
 
@@ -219,7 +233,7 @@
         </label>
         <p>
             <button id="removeOk" type="submit" name="removeAddress" form="formUser" th:formaction="@{/user/address}" formnovalidate="formnovalidate">Yes</button>
-            <a href="#user-details"><button type="button">No</button></a>
+            <button id="removeCancel" type="button">No</button>
         </p>
     </div>
 </div>

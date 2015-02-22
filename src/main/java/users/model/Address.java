@@ -7,13 +7,13 @@ import javax.persistence.Embeddable;
 public class Address {
 
     @Column(nullable = false)
-    private String country;
+    private String country = "";
 
     @Column(nullable = false)
-    private String city;
+    private String city = "";
 
     @Column(nullable = false)
-    private String street;
+    private String street = "";
 
     public Address() {
     }

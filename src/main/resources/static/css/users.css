@@ -224,6 +224,12 @@ button[name="save"] {
     font-size: 120%;
 }
 
+button[name="cancel"] {
+    width: 7em;
+    font-size: 110%;
+    margin-left: 1em;
+}
+
 .modalDialog {
     position: fixed;
     font-family: Arial, Helvetica, sans-serif;
