@@ -3,9 +3,11 @@ package users.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -26,8 +28,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create() {
-        return "user";
+    public ModelAndView create() {
+        return new ModelAndView("user", "user", new User());
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
@@ -38,6 +40,18 @@ public class UserController {
         }
 
         return new ModelAndView("user", "user", user);
+    }
+
+    @RequestMapping(value = "/address", params = {"removeAddress"})
+    public String removeAddress(@RequestParam("removeAddress") int index, @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+        user.getAddresses().remove(index);
+
+        if (user.getId() == 0) {
+            return "redirect:/create";
+        }
+
+        redirectAttributes.addAttribute("id", user.getId());
+        return "redirect:/update/{id}";
     }
 
     @RequestMapping(value = "/list1", method = RequestMethod.GET)

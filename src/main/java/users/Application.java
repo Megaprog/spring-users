@@ -8,12 +8,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import users.model.Address;
 import users.model.User;
 import users.model.UserRole;
 import users.repository.UserRepository;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.util.Arrays;
 
 @Configuration
 @ComponentScan
@@ -32,6 +34,10 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        final User user = userRepository.save(new User("admin", passwordEncoder.encode("admin"), "admin@gmail.com", UserRole.Editor, "Administration"));
+        final User user = userRepository.save(
+                new User("admin", passwordEncoder.encode("admin"), "admin@gmail.com", UserRole.Editor, Arrays.asList(
+                        new Address("Russia", "Moscow", "Arbat, 9"),
+                        new Address("Russia", "Novorossiysk", "Vidova, 1")
+                )));
     }
 }

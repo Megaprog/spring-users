@@ -4,25 +4,104 @@
     <title>User details</title>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="../static/css/users.css" th:href="@{/css/users.css}"/>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+        function init() {
+            var formAddress = document.getElementById("formAddress");
+            var closeAddress = document.getElementById("closeAddress");
+            var h3Address = document.getElementById("h3Address");
+            var addressCountry = document.getElementById("addressCountry");
+            var addressCity = document.getElementById("addressCity");
+            var addressStreet = document.getElementById("addressStreet");
+
+            var addressRemove = document.getElementById("addressRemove");
+            var h3Remove = document.getElementById("h3Remove");
+            var removeOk = document.getElementById("removeOk");
+
+            for (var i = 0; i < 1000; i++) {
+                var address = document.getElementById("address" + i);
+                if (!address) {
+                    break;
+                }
+
+                refreshAddress(i, address);
+
+                var editAddress = document.getElementById("editAddress" + i);
+                editAddress.onclick = function(index) {
+                    return function(e) {
+                        var country = document.getElementById("country" + index);
+                        var city = document.getElementById("city" + index);
+                        var street = document.getElementById("street" + index);
+
+                        h3Address.innerText = "Address" + (index + 1);
+                        addressCountry.value = country.value;
+                        addressCity.value = city.value;
+                        addressStreet.value = street.value;
+
+                        formAddress.onsubmit = function(e) {
+                            e.preventDefault();
+
+                            country.value = addressCountry.value;
+                            city.value = addressCity.value;
+                            street.value = addressStreet.value;
+
+                            refreshAddress(index);
+
+                            closeAddress.click();
+                        };
+                    };
+                }(i);
+
+                var removeAddress = document.getElementById("removeAddress" + i);
+                removeAddress.onclick = function(index) {
+                    return function(e) {
+                        h3Remove.innerText = "Address" + (index + 1);
+                        addressRemove.value = document.getElementById("address" + index).value;
+                        removeOk.value = index;
+                    };
+                }(i);
+            }
+        }
+
+        function refreshAddress(index, address) {
+            if (!address) {
+                address = document.getElementById("address" + index);
+            }
+
+            address.value = document.getElementById("country" + index).value + ", " +
+                document.getElementById("city" + index).value + ", " + document.getElementById("street" + index).value;
+        }
+
+        window.addEventListener("load", init, false);
+    /*]]>*/
+    </script>
 </head>
 <body>
 
-<h2>User details</h2>
+<h2 id="user-details">User details</h2>
 
-<p>All fields are required</p>
+<p>Password must be 6 characters at least and contains one (or more) digit and upper case letter.</p>
 
-<form  class="detail" th:action="@{/user/save}" method="post" th:object="${user}">
+<form id="formUser" class="detail" th:action="@{/user/save}" method="post" th:object="${user}">
 
     <ul th:if="${#fields.hasErrors('*')}" class="errorlist">
         <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
     </ul>
 
+    <input type="hidden" th:field="*{id}"/>
+
     <fieldset>
         <legend>General</legend>
         <table>
             <tr>
-                <td><label for="email">Email:</label></td>
+                <td><label for="email">Email (login):</label></td>
                 <td><input id="email" type="email" name="email" required="required" th:field="*{email}" th:errorclass="fieldError"/></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label for="password">Password:</label></td>
+                <td><input id="password" type="password" name="password" th:required="*{id} == 0" th:field="*{password}" th:errorclass="fieldError"
+                           pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$"/></td>
                 <td></td>
             </tr>
             <tr>
@@ -54,16 +133,18 @@
                 </td>
                 <td></td>
             </tr>
-            <tr>
-                <td>Added time:</td>
-                <td th:text="*{{createdZoneTime}}">01.01.2001</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Edited time:</td>
-                <td th:text="*{{updatedZoneTime}}">01.01.2001</td>
-                <td></td>
-            </tr>
+            <th:block th:if="*{id} != 0">
+                <tr>
+                    <td>Added time:</td>
+                    <td th:text="*{{createdZoneTime}}">01.01.2001</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Edited time:</td>
+                    <td th:text="*{{updatedZoneTime}}">01.01.2001</td>
+                    <td></td>
+                </tr>
+            </th:block>
         </table>
     </fieldset>
 
@@ -71,22 +152,29 @@
         <legend>Addresses</legend>
         <table class="addresses">
             <tbody>
+            <th:block th:each="address, addressStat : *{addresses}" th:object="${address}" th:with="inputId='address' + ${addressStat.index}">
                 <tr>
-                    <td><label for="address">Address1:</label> </td>
-                    <td><textarea id="address" readonly="readonly"></textarea></td>
-                </tr>
-                <tr>
-                    <td></td>
+                    <td><label for="address" th:for="${inputId}" th:text="'Address' + ${addressStat.count}">Address1:</label></td>
                     <td>
-                        <button type="submit" name="editAddress">Edit</button>&nbsp;&nbsp;
-                        <button type="submit" name="removeAddress">Remove</button>
+                        <textarea id="address" th:id="${inputId}">Russia, Moscow, Arbat, 9</textarea>
+                        <input type="hidden" name="country" th:id="'country' + ${addressStat.index}" th:name="'country' + ${addressStat.index}" th:value="*{country}"/>
+                        <input type="hidden" name="city" th:id="'city' + ${addressStat.index}" th:name="'city' + ${addressStat.index}" th:value="*{city}"/>
+                        <input type="hidden" name="street" th:id="'street' + ${addressStat.index}" th:name="'street' + ${addressStat.index}" th:value="*{street}"/>
                     </td>
                 </tr>
+                <tr class="address-edit">
+                    <td></td>
+                    <td>
+                        <a href="#editAddress"><button th:id="'editAddress' + ${addressStat.index}" type="button" name="edit">Edit</button></a>
+                        <a href="#removeAddress"><button th:id="'removeAddress' + ${addressStat.index}" type="button">Remove</button></a>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
             <tfoot>
                 <tr>
                     <td></td>
-                    <td><button type="submit" name="addAddress">New address</button></td>
+                    <td><button type="submit" name="addAddress" th:formaction="@{/user/address}" formnovalidate="formnovalidate">New address</button></td>
                 </tr>
             </tfoot>
         </table>
@@ -96,6 +184,45 @@
         <button type="submit" name="save">Save</button>
     </p>
 </form>
+
+<div id="editAddress" class="modalDialog">
+    <div>
+        <a href="#user-details" title="Закрыть" class="close" id="closeAddress">X</a>
+        <h3 id="h3Address">Address</h3>
+
+        <form id="formAddress">
+            <label>Country:
+                <input id="addressCountry" type="text" required="required"/>
+            </label>
+            <label>City:
+                <input id="addressCity" type="text" required="required"/>
+            </label>
+            <label>Street:
+                <input id="addressStreet" type="text" required="required"/>
+            </label>
+            <p>
+                <button id="addressOk" type="submit">Ok</button>
+                <a href="#user-details"><button type="button">Cancel</button></a>
+            </p>
+        </form>
+    </div>
+</div>
+
+<div id="removeAddress" class="modalDialog">
+    <div>
+        <a href="#user-details" title="Закрыть" class="close">X</a>
+        <h3 id="h3Remove">Remove address</h3>
+        <p>Are you sure you want to delete this address?</p>
+
+        <label>
+            <textarea id="addressRemove" readonly="readonly">Russia, Moscow, Arbat, 9</textarea>
+        </label>
+        <p>
+            <button id="removeOk" type="submit" name="removeAddress" form="formUser" th:formaction="@{/user/address}" formnovalidate="formnovalidate">Yes</button>
+            <a href="#user-details"><button type="button">No</button></a>
+        </p>
+    </div>
+</div>
 
 </body>
 </html>

@@ -46,19 +46,18 @@ public class User {
 
     @ElementCollection
     @OrderColumn(name = "address_order")
-    @Column(name = "address", nullable = false, length = 512, unique = true)
     @CollectionTable(name = "address", joinColumns = @JoinColumn(name = "user_id"), foreignKey = @ForeignKey(name = "address_to_user"))
-    private List<String> addresses = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String name, String password, String email, UserRole role, String address) {
+    public User(String name, String password, String email, UserRole role, List<Address> addresses) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = role;
-        this.addresses.add(address);
+        this.addresses = addresses;
     }
 
     public long getId() {
@@ -67,11 +66,19 @@ public class User {
 
     @DateTimeFormat(style = "LL")
     public ZonedDateTime getCreatedZoneTime() {
+        if (created == null) {
+            return null;
+        }
+
         return ZonedDateTime.of(created.toLocalDateTime(), ZoneId.of(time_zone));
     }
 
     @DateTimeFormat(style = "LL")
     public ZonedDateTime getUpdatedZoneTime() {
+        if (created == null) {
+            return null;
+        }
+
         return ZonedDateTime.of(updated.toLocalDateTime(), ZoneId.of(time_zone));
     }
 
@@ -115,11 +122,11 @@ public class User {
         this.time_zone = time_zone;
     }
 
-    public List<String> getAddresses() {
+    public List<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<String> addresses) {
+    public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
     }
 
