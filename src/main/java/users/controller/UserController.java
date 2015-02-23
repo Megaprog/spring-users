@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 import users.model.Address;
 import users.model.User;
 import users.repository.UserRepository;
+import users.service.UserService;
 
 @Controller
 @RequestMapping("/user")
@@ -23,6 +24,8 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserService userService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list() {
@@ -48,27 +51,22 @@ public class UserController {
         return new ModelAndView("user", "user", user);
     }
 
-    @RequestMapping(value = "/address", params = {"addAddress"})
+    @RequestMapping(value = "/address", params = {"addAddress"}, method = RequestMethod.POST)
     public String addAddress(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         user.getAddresses().add(new Address());
-
-        redirectAttributes.addFlashAttribute("user", user);
-
-        if (user.getId() == 0) {
-            return "redirect:create";
-        }
-
-        redirectAttributes.addAttribute("id", user.getId());
-        return "redirect:update/{id}";
+        return processAddress(user, redirectAttributes);
     }
 
-    @RequestMapping(value = "/address", params = {"removeAddress"})
+    @RequestMapping(value = "/address", params = {"removeAddress"}, method = RequestMethod.POST)
     public String removeAddress(@RequestParam("removeAddress") int index, @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         user.getAddresses().remove(index);
+        return processAddress(user, redirectAttributes);
+    }
 
+    protected String processAddress(User user, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("user", user);
 
-        if (user.getId() == 0) {
+        if (userService.isNew(user)) {
             return "redirect:create";
         }
 
@@ -76,11 +74,10 @@ public class UserController {
         return "redirect:update/{id}";
     }
 
-    @RequestMapping(value = "/list1", method = RequestMethod.GET)
-    public RedirectView redirectList(RedirectAttributes redirectAttributes) {
-        final RedirectView redirectView = new RedirectView("/user/list");
-        redirectView.setPropagateQueryParams(true);
-        return redirectView;
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String save(@ModelAttribute("user") User user, BindingResult bindingResult) {
+        userService.createOrUpdate(user);
+        return "redirect:/";
     }
 
 }

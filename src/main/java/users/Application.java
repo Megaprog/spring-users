@@ -34,10 +34,13 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        final User user = userRepository.save(
-                new User("admin", passwordEncoder.encode("admin"), "admin@gmail.com", UserRole.Editor, Arrays.asList(
-                        new Address("Russia", "Moscow", "Arbat, 9"),
-                        new Address("Russia", "Novorossiysk", "Vidova, 1")
-                )));
+        if (!userRepository.findOneByEmail("admin@gmail.com").isPresent()) {
+            userRepository.save(
+                    new User("admin", passwordEncoder.encode("admin"), "admin@gmail.com", UserRole.Editor, Arrays.asList(
+                            new Address("Russia", "Moscow", "Arbat, 9"),
+                            new Address("Russia", "Novorossiysk", "Vidova, 1")
+                    )));
+        }
+
     }
 }

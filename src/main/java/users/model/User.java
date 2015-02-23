@@ -22,11 +22,11 @@ public class User {
     private long id;
 
     @Column(nullable = false)
-    private Timestamp created;
+    private Timestamp created = Timestamp.from(Instant.now());
 
     @Column(nullable = false)
     @Version
-    private Timestamp updated;
+    private Timestamp updated = created;
 
     @Column(nullable = false)
     private String name = "";
@@ -86,19 +86,11 @@ public class User {
 
     @DateTimeFormat(style = "LL")
     public ZonedDateTime getCreatedZoneTime() {
-        if (created == null) {
-            return null;
-        }
-
         return ZonedDateTime.of(created.toLocalDateTime(), ZoneId.of(time_zone));
     }
 
     @DateTimeFormat(style = "LL")
     public ZonedDateTime getUpdatedZoneTime() {
-        if (created == null) {
-            return null;
-        }
-
         return ZonedDateTime.of(updated.toLocalDateTime(), ZoneId.of(time_zone));
     }
 

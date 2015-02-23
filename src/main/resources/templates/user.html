@@ -108,13 +108,13 @@
         <table>
             <tr>
                 <td><label for="email">Email (login):</label></td>
-                <td><input id="email" type="email" name="email" required="required" th:field="*{email}" th:errorclass="fieldError"/></td>
+                <td><input id="email" type="email" name="email" required="required" th:field="*{email}" th:errorclass="fieldError" autocomplete="off"/></td>
                 <td></td>
             </tr>
             <tr>
                 <td><label for="password">Password:</label></td>
                 <td><input id="password" type="password" name="password" th:required="*{id} == 0" th:field="*{password}" th:errorclass="fieldError"
-                           pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$"/></td>
+                           pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$" autocomplete="off"/></td>
                 <td></td>
             </tr>
             <tr>
