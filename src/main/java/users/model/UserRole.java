@@ -2,6 +2,6 @@ package users.model;
 
 public enum UserRole {
 	
-	User,
-	Editor
+	user,
+	editor
 }

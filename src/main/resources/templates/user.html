@@ -218,6 +218,7 @@
                     <td><input id="addressStreet" type="text" required="required"/></td>
                 </tr>
             </table>
+
             <p class="addressButtons">
                 <button id="addressOk" type="submit">Ok</button>
                 <button id="addressCancel" type="button">Cancel</button>
@@ -235,6 +236,7 @@
         <label>
             <textarea id="addressRemove" readonly="readonly">Russia, Moscow, Arbat, 9</textarea>
         </label>
+
         <p class="removeButtons">
             <button id="removeOk" type="submit" name="removeAddress" form="formUser" th:formaction="@{/user/address}" formnovalidate="formnovalidate">Yes</button>
             <button id="removeCancel" type="button">No</button>

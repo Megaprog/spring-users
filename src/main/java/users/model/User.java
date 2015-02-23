@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -45,7 +46,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)
-    private UserRole role = UserRole.User;
+    private UserRole role = UserRole.user;
 
     @Column(nullable = false)
     private String time_zone = ZoneId.systemDefault().getId();
@@ -60,12 +61,12 @@ public class User {
     public User() {
     }
 
-    public User(String name, String password, String email, UserRole role, List<Address> addresses) {
+    public User(String name, String password, String email, UserRole role, Collection<Address> addresses) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = role;
-        this.addresses = addresses;
+        this.addresses = new ArrayList<>(addresses);
     }
 
     public long getId() {

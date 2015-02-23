@@ -24,4 +24,6 @@ Users list and forms for edit. Using Spring Boot, JSP, H2
     - при добавлении нового пользователя хотя бы один адрес обязательно должен быть добавлен
 	
 You can run the application server using mvn spring-boot:run
-then go to http://localhost:8080
+then open in browser the link: http://localhost:8080
+
+Requirements: Java 1.8, IE +9 or other modern browser
