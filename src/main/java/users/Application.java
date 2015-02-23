@@ -37,9 +37,6 @@ public class Application implements CommandLineRunner {
                 new Address("Russia", "Novorossiysk", "Vidova, 1")
         ));
 
-        System.out.println("!!!!!!!!!!!!");
-        System.out.println(user);
-
         if (!userRepository.findOneByEmail("admin@gmail.com").isPresent()) {
             userRepository.saveAndFlush(user);
         }
