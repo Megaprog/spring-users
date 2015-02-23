@@ -1,5 +1,7 @@
 package users.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -7,12 +9,15 @@ import javax.persistence.Embeddable;
 public class Address {
 
     @Column(nullable = false)
+    @NotBlank
     private String country = "";
 
     @Column(nullable = false)
+    @NotBlank
     private String city = "";
 
     @Column(nullable = false)
+    @NotBlank
     private String street = "";
 
     public Address() {

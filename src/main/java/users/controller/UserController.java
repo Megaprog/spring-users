@@ -5,6 +5,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,9 @@ import users.model.Address;
 import users.model.User;
 import users.repository.UserRepository;
 import users.service.UserService;
+import users.validator.UserValidator;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/user")
@@ -26,6 +31,13 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    UserValidator userValidator;
+
+    @InitBinder("user")
+    public void initBinder(WebDataBinder binder) {
+        binder.addValidators(userValidator);
+    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list() {
@@ -33,8 +45,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create(@ModelAttribute("user") User user) {
-        return "user";
+    public ModelAndView create(ModelMap model) {
+        if (model.containsAttribute("user")) {
+            return new ModelAndView("user", model);
+        }
+
+        return new ModelAndView("user", "user", new User());
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
@@ -54,16 +70,27 @@ public class UserController {
     @RequestMapping(value = "/address", params = {"addAddress"}, method = RequestMethod.POST)
     public String addAddress(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         user.getAddresses().add(new Address());
-        return processAddress(user, redirectAttributes);
+        return processRedirect(user, redirectAttributes);
     }
 
     @RequestMapping(value = "/address", params = {"removeAddress"}, method = RequestMethod.POST)
     public String removeAddress(@RequestParam("removeAddress") int index, @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         user.getAddresses().remove(index);
-        return processAddress(user, redirectAttributes);
+        return processRedirect(user, redirectAttributes);
     }
 
-    protected String processAddress(User user, RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String save(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
+            return processRedirect(user, redirectAttributes);
+        }
+
+        userService.createOrUpdate(user);
+        return "redirect:/";
+    }
+
+    protected String processRedirect(User user, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("user", user);
 
         if (userService.isNew(user)) {
@@ -72,12 +99,6 @@ public class UserController {
 
         redirectAttributes.addAttribute("id", user.getId());
         return "redirect:update/{id}";
-    }
-
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(@ModelAttribute("user") User user, BindingResult bindingResult) {
-        userService.createOrUpdate(user);
-        return "redirect:/";
     }
 
 }

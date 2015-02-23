@@ -139,7 +139,7 @@ table.users {
 
 ul.errorlist {
     border: 1px dotted #333;
-    margin: 10px 10px 50px 10px;
+    margin: 10px 10px 40px 10px;
     padding: 10px;
 }
 
@@ -229,6 +229,11 @@ button[name="cancel"] {
     font-size: 110%;
     margin-left: 1em;
 }
+
+#addressRemove {
+    width: 20em;
+}
+
 
 .modalDialog {
     position: fixed;

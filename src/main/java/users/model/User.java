@@ -1,8 +1,12 @@
 package users.model;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -29,12 +33,14 @@ public class User {
     private Timestamp updated = created;
 
     @Column(nullable = false)
+    @NotBlank
     private String name = "";
 
     @Column(nullable = false)
     private String password = "";
 
     @Column(nullable = false)
+    @Email
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -47,6 +53,8 @@ public class User {
     @ElementCollection
     @OrderColumn(name = "address_order")
     @CollectionTable(name = "address", joinColumns = @JoinColumn(name = "user_id"), foreignKey = @ForeignKey(name = "address_to_user"))
+    @NotEmpty
+    @Valid
     private List<Address> addresses = new ArrayList<>();
 
     public User() {

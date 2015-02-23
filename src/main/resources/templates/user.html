@@ -89,14 +89,13 @@
 </head>
 <body>
 
-<h2 id="user-details">User details</h2>
-
-<p>Password must be 6 characters at least and contains one (or more) digit and upper case letter.</p>
+<h2 id="user-details" th:text="${user.id == 0}? 'New user' : 'Edit user'">User details</h2>
 
 <form id="formUser" class="detail" th:action="@{/user/save}" method="post" th:object="${user}">
 
-    <ul th:if="${#fields.hasErrors('*')}" class="errorlist">
-        <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+    <ul th:if="${#fields.hasErrors()}" class="errorlist">
+        <li th:each="err : ${#fields.detailedErrors()}">
+            <b th:text="${#strings.capitalize(err.fieldName)} + ': '">Name:</b><span th:text="${err.message}">Input is incorrect</span></li>
     </ul>
 
     <input type="hidden" th:field="*{id}"/>
@@ -169,7 +168,7 @@
                 <tr>
                     <td><label for="address" th:for="${inputId}" th:text="'Address' + ${addressStat.count}">Address1:</label></td>
                     <td>
-                        <textarea id="address" th:id="${inputId}">Russia, Moscow, Arbat, 9</textarea>
+                        <textarea id="address" th:id="${inputId}" readonly="readonly">Russia, Moscow, Arbat, 9</textarea>
                         <input type="hidden" th:field="*{addresses[__${addressStat.index}__].country}"/>
                         <input type="hidden" th:field="*{addresses[__${addressStat.index}__].city}"/>
                         <input type="hidden" th:field="*{addresses[__${addressStat.index}__].street}"/>
@@ -205,16 +204,21 @@
         <h3 id="h3Address">Address</h3>
 
         <form id="formAddress">
-            <label>Country:
-                <input id="addressCountry" type="text" required="required"/>
-            </label>
-            <label>City:
-                <input id="addressCity" type="text" required="required"/>
-            </label>
-            <label>Street:
-                <input id="addressStreet" type="text" required="required"/>
-            </label>
-            <p>
+            <table>
+                <tr>
+                    <td><label for="addressCountry">Country:</label></td>
+                    <td><input id="addressCountry" type="text" required="required"/></td>
+                </tr>
+                <tr>
+                    <td><label for="addressCity">City:</label></td>
+                    <td><input id="addressCity" type="text" required="required"/></td>
+                </tr>
+                <tr>
+                    <td><label for="addressStreet">Street:</label></td>
+                    <td><input id="addressStreet" type="text" required="required"/></td>
+                </tr>
+            </table>
+            <p class="addressButtons">
                 <button id="addressOk" type="submit">Ok</button>
                 <button id="addressCancel" type="button">Cancel</button>
             </p>
@@ -231,7 +235,7 @@
         <label>
             <textarea id="addressRemove" readonly="readonly">Russia, Moscow, Arbat, 9</textarea>
         </label>
-        <p>
+        <p class="removeButtons">
             <button id="removeOk" type="submit" name="removeAddress" form="formUser" th:formaction="@{/user/address}" formnovalidate="formnovalidate">Yes</button>
             <button id="removeCancel" type="button">No</button>
         </p>
