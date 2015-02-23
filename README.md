@@ -1,6 +1,6 @@
 # spring-users
 
-Users list and forms for edit. Using Spring Boot, JSP, H2
+Users list and form for edit. Using Spring Boot, Spring Security, Thymeleaf, JPA, H2
 
 Веб-приложение со следующим функционалом:
 
