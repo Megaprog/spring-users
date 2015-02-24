@@ -26,6 +26,21 @@
                 closeRemove.click();
             };
 
+            //check browser supports button form attribute
+            if (!(window.HTMLFormElement && removeOk.form instanceof HTMLFormElement)) {
+                removeOk.onclick = function() {
+                    var formUser = document.getElementById("formUser");
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = removeOk.name;
+                    input.value = removeOk.value;
+                    formUser.appendChild(input);
+                    formUser.action = removeOk.formAction;
+                    formUser.noValidate = true;
+                    formUser.submit();
+                };
+            }
+
             for (var i = 0; i < 1000; i++) {
                 var address = document.getElementById("address" + i);
                 if (!address) {
@@ -48,6 +63,8 @@
 
                         closeAddress.href = "#address" + index;
 
+                        location.href = '#editAddress';
+
                         formAddress.onsubmit = function(e) {
                             e.preventDefault();
 
@@ -69,6 +86,8 @@
                         addressRemove.value = document.getElementById("address" + index).value;
                         removeOk.value = index;
                         closeRemove.href = "#address" + index;
+
+                        location.href = '#removeAddress'
                     };
                 }(i);
             }
@@ -177,8 +196,8 @@
                 <tr class="address-edit">
                     <td></td>
                     <td>
-                        <a href="#editAddress"><button th:id="'editAddress' + ${addressStat.index}" type="button" name="edit">Edit</button></a>
-                        <a href="#removeAddress"><button th:id="'removeAddress' + ${addressStat.index}" type="button">Remove</button></a>
+                        <button th:id="'editAddress' + ${addressStat.index}" type="button" name="edit">Edit</button>
+                        <button th:id="'removeAddress' + ${addressStat.index}" type="button">Remove</button>
                     </td>
                 </tr>
             </th:block>
@@ -194,7 +213,7 @@
 
     <p>
         <button type="submit" name="save">Save</button>
-        <a href="users.html" th:href="@{/user/list}"><button type="button" name="cancel">Cancel</button></a>
+        <button type="button" name="cancel" onClick="location.href = '/'">Cancel</button>
     </p>
 </form>
 
@@ -238,7 +257,7 @@
         </label>
 
         <p class="removeButtons">
-            <button id="removeOk" type="submit" name="removeAddress" form="formUser" th:formaction="@{/user/address}" formnovalidate="formnovalidate">Yes</button>
+            <button id="removeOk" type="submit" name="removeAddress" value="0" form="formUser" th:formaction="@{/user/address}" formnovalidate="formnovalidate">Yes</button>
             <button id="removeCancel" type="button">No</button>
         </p>
     </div>

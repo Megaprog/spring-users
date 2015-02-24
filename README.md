@@ -26,4 +26,4 @@ Users list and form for edit. Using Spring Boot, Spring Security, Thymeleaf, JPA
 You can run the application server using mvn spring-boot:run
 then open in browser the link: http://localhost:8080
 
-Requirements: Java 1.8, Maven 3.2, Chrome or Firefox browser (IE not supported).
+Requirements: Java 1.8, Maven 3.2, modern browser (Chrome, Firefox, IE 11).
