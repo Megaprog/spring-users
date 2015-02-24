@@ -27,14 +27,16 @@
             <td th:text="*{email}">some@mail.com</td>
             <td th:text="*{name}">Jon</td>
             <td th:text="*{role.name()}">User</td>
-            <td><a href="user.html" th:href="@{/user/update/{id}(id=*{id})}">
-                <button type="button" th:disabled="${currentUser.role} != ${T(users.model.UserRole).editor}">Edit</button></a></td>
+            <td>
+                <button type="button" th:disabled="${currentUser.role} != ${T(users.model.UserRole).editor}" th:attr="onclick='location.href=&quot;' + @{/user/update/{id}(id=*{id})} + '&quot;'">Edit</button>
+            </td>
         </tr>
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="4"><a href="user.html" th:href="@{/user/create}">
-                <button type="button" name="newUser" th:disabled="${currentUser.role} != ${T(users.model.UserRole).editor}">New user</button> </a></td>
+            <td colspan="4">
+                <button type="button" name="newUser" th:disabled="${currentUser.role} != ${T(users.model.UserRole).editor}" th:attr="onclick='location.href=&quot;' + @{/user/create} + '&quot;'">New user</button>
+            </td>
         </tr>
     </tfoot>
 </table>
