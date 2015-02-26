@@ -15,6 +15,7 @@ import users.service.UserService;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.notNull;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -32,6 +33,8 @@ public class UserControllerTest extends AbstractMvcTest {
     @Before
     public void setUp() throws Exception {
         reset(userRepository, userService);
+
+        when(userService.isNew(any(User.class))).thenCallRealMethod();
     }
 
     @Test
@@ -87,16 +90,18 @@ public class UserControllerTest extends AbstractMvcTest {
     public void testAddAddress() throws Exception {
         redirect(mockMvc.perform(post("/user/address")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("id", "1")
+                        .param("id", "0")
                         .param("addAddress", "")
         )
-                .andExpect(status().isFound()).andReturn())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/user/create"))
+                .andReturn())
 
         .andExpect(status().isOk())
         .andExpect(view().name("user"))
         .andExpect(model().attributeHasNoErrors())
         .andExpect(model().attribute("user", allOf(
-                hasProperty("id", is(1L)),
+                hasProperty("id", is(0L)),
                 hasProperty("addresses", hasSize(1)),
                 hasProperty("addresses", hasItem(new Address()))
         )));
@@ -112,7 +117,9 @@ public class UserControllerTest extends AbstractMvcTest {
                         .param("addresses[0].street", "Broadway, 1")
                         .param("removeAddress", "0")
         )
-                .andExpect(status().isFound()).andReturn())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/user/update/1"))
+                .andReturn())
 
                 .andExpect(status().isOk())
                 .andExpect(view().name("user"))
