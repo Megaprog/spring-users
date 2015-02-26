@@ -106,11 +106,11 @@ public class UserController {
         redirectAttributes.addFlashAttribute("user", user);
 
         if (userService.isNew(user)) {
-            return "redirect:create";
+            return "redirect:/user/create";
         }
 
         redirectAttributes.addAttribute("id", user.getId());
-        return "redirect:update/{id}";
+        return "redirect:/user/update/{id}";
     }
 
 }

@@ -28,17 +28,17 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         User user = (User) target;
-        validatePasswords(errors, user);
-        validateEmail(errors, user);
+        validatePasswords(user, errors);
+        validateEmail(user, errors);
     }
 
-    private void validatePasswords(Errors errors, User user) {
+    private void validatePasswords(User user, Errors errors) {
         if (!passwordPattern.matcher(user.getPassword()).find() && (userService.isNew(user) || !user.getPassword().isEmpty()) ) {
             errors.reject("password.no_match", "Passwords do not match");
         }
     }
 
-    private void validateEmail(Errors errors, User user) {
+    private void validateEmail(User user, Errors errors) {
         if (userService.isNew(user) && userRepository.findOneByEmail(user.getEmail()).isPresent()) {
             errors.rejectValue("email", "email.exists", "User with this email already exists");
         }
